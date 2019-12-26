@@ -10,6 +10,8 @@ Written by Thomas Janssen, December 2019.
 import PySimpleGUI as gui
 from datetime import date
 import random
+from gtts import gTTS
+from playsound import playsound
 
 gui.theme('Lightgreen')
 end_program = False
@@ -88,3 +90,12 @@ while not end_program:
         if len(previous_numbers) == max_numbers:
             gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
             window.find_element('Volgend nummer trekken').Update(disabled=True)
+
+        window.refresh()
+        # Play number using Google TSS
+        try:
+            tts = gTTS(text=str(nr), lang='nl', slow=False)
+            tts.save("nr.mp3")
+            playsound('nr.mp3')
+        except Exception as e:
+            print(e)
