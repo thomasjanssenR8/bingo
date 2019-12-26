@@ -1,3 +1,12 @@
+"""
+Play a Bingo game using the PySimpleGUI framework.
+
+The program generates random numbers between 1 and 75 (without replacement) and displays them on a canvas.
+Previously taken numbers are shown in small circles on the canvas.
+
+Written by Thomas Janssen, December 2019.
+"""
+
 import PySimpleGUI as gui
 from datetime import date
 import random
@@ -77,10 +86,5 @@ while not end_program:
 
         previous_numbers.append(nr)
         if len(previous_numbers) == max_numbers:
-            #end_program = True
             gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
             window.find_element('Volgend nummer trekken').Update(disabled=True)
-
-
-# IDEAS & REMARKS
-# * Geluid: TTS?
