@@ -90,10 +90,9 @@ while not close_program:
 
         # Play number using Google TSS
         try:
-            if len(previous_numbers) > 72:  ##################################### TEMP
-                tts = gTTS(text=str(nr), lang='nl', slow=False)
-                tts.save("nr.mp3")
-                playsound('nr.mp3')
+            tts = gTTS(text=str(nr), lang='nl', slow=False)
+            tts.save("nr.mp3")
+            playsound('nr.mp3')
         except Exception as e:
             print(e)
 
