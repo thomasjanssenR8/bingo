@@ -1,0 +1,5 @@
+PySimpleGUI
+datetime
+random
+gtts
+playsound
