@@ -14,7 +14,6 @@ from gtts import gTTS
 from playsound import playsound
 
 gui.theme('Lightgreen')
-end_program = False
 
 # Begin screen to enter begin number, end number and amount of numbers in the lottery.
 font = ('Helvetica', 20)
@@ -23,12 +22,13 @@ layout = [[gui.Text(f'Welkom op de Bingo-trekking van {date.today().strftime("%d
 window = gui.Window('Bingo', layout)
 
 begin_screen = True
+close_program = False
 global begin, end, max_numbers, graph
 while begin_screen:
     event, values = window.read()
     if event in (None, 'Afsluiten'):  # if user closes window or clicks cancel
         begin_screen = False
-        end_program = True
+        close_program = True
     if event == 'Start':
         begin, end, max_numbers = 1, 75, 75
         try:
@@ -45,22 +45,22 @@ while begin_screen:
 window.close()
 
 # Game screen to play the lottery.
-if not end_program:
+if not close_program:
     layout = [[gui.Graph(canvas_size=(1000, 800), graph_bottom_left=(0, 0), graph_top_right=(1000, 800), enable_events=True, key='graph')],
               [gui.Button('Volgend nummer trekken', font=font), gui.Button('Afsluiten', font=font)]]
     window = gui.Window('Bingo', layout, finalize=True)
     window.Maximize()
     graph = window['graph']
 
-previous_numbers = []
-bingo_numbers = random.sample(range(begin, end + 1), max_numbers)
-n_numbers = 0
-i = 0
+    previous_numbers = []
+    bingo_numbers = random.sample(range(begin, end + 1), max_numbers)
+    n_numbers = 0
+    i = 0
 
-while not end_program:
+while not close_program:
     event, values = window.read()
     if event in (None, 'Afsluiten'):
-        end_program = True
+        close_program = True
         window.close()
 
     # Get unique random numbers
@@ -68,7 +68,7 @@ while not end_program:
         n_numbers += 1
         nr = bingo_numbers[i]
         i += 1
-        print(f'Next number is {nr}')
+        print(f'Current number is {nr}')
 
         # Draw current number in large circle
         circle = graph.draw_circle((500, 220), 200, fill_color='red', line_color='black', line_width=5)
@@ -85,17 +85,18 @@ while not end_program:
             if n_prev_nrs % 15 == 0:
                 x = 45
                 y -= 70
-
         previous_numbers.append(nr)
-        if len(previous_numbers) == max_numbers:
-            gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
-            window.find_element('Volgend nummer trekken').Update(disabled=True)
-
         window.refresh()
+
         # Play number using Google TSS
         try:
-            tts = gTTS(text=str(nr), lang='nl', slow=False)
-            tts.save("nr.mp3")
-            playsound('nr.mp3')
+            if len(previous_numbers) > 72:  ##################################### TEMP
+                tts = gTTS(text=str(nr), lang='nl', slow=False)
+                tts.save("nr.mp3")
+                playsound('nr.mp3')
         except Exception as e:
             print(e)
+
+    if not close_program and len(previous_numbers) == max_numbers:
+        # gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
+        window.find_element('Volgend nummer trekken').Update(disabled=True)
