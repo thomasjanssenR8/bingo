@@ -110,7 +110,7 @@ while not close_program:
         try:
             if offline_voice:
                 # Play offline sound file (in Dutch)
-                playsound(f'records/Record-{nr:03}.aac')
+                playsound(f'records/Record-{nr:03}.mp3')
 
             else:
                 # Play number using Google Text To Speech in language of choice
