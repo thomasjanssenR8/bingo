@@ -110,20 +110,20 @@ while not close_program:
         previous_numbers.append(nr)
         window.refresh()
 
-        # # Speak the current number
-        # try:
-        #     if offline_voice:
-        #         # Play offline sound file (in Dutch)
-        #         playsound(f'records/Record-{nr:03}.mp3')
-        #
-        #     else:
-        #         # Play number using Google Text To Speech in language of choice
-        #         tts = gTTS(text=str(nr), lang='nl', slow=False)
-        #         tts.save("nr.mp3")
-        #         playsound('nr.mp3')
-        #
-        # except Exception as e:
-        #     print(e)
+        # Speak the current number
+        try:
+            if offline_voice:
+                # Play offline sound file (in Dutch)
+                playsound(f'records/Record-{nr:03}.mp3')
+
+            else:
+                # Play number using Google Text To Speech in language of choice
+                tts = gTTS(text=str(nr), lang='nl', slow=False)
+                tts.save("nr.mp3")
+                playsound('nr.mp3')
+
+        except Exception as e:
+            print(e)
 
     if not close_program and len(previous_numbers) == max_numbers:
         # gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
