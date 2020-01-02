@@ -30,7 +30,7 @@ window = gui.Window('Bingo', layout)
 
 begin_screen = True
 close_program = False
-global begin, end, max_numbers, graph
+global begin, end, max_numbers, graph, WIDTH, HEIGHT
 while begin_screen:
     event, values = window.read()
     if event is None:
@@ -39,6 +39,7 @@ while begin_screen:
     if event == 'Afsluiten':  # if user closes window or clicks cancel
         confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
         if confirm == 'OK':
+            print('Program ended!')
             begin_screen = False
             close_program = True
     if event == 'Start':
@@ -56,12 +57,12 @@ while begin_screen:
             begin_screen = False
 window.close()
 
-# Game screen to play the lottery.
+# Game screen to play the lottery (set fixed window size)
 if not close_program:
-    layout = [[gui.Graph(canvas_size=(1000, 800), graph_bottom_left=(0, 0), graph_top_right=(1000, 800), enable_events=True, key='graph')],
+    WIDTH, HEIGHT = 1300, 615
+    layout = [[gui.Graph(canvas_size=(WIDTH, HEIGHT), graph_bottom_left=(0, 0), graph_top_right=(WIDTH, HEIGHT), enable_events=True, key='graph')],
               [gui.Button('Volgend nummer trekken', font=font), gui.Button('Afsluiten', font=font)]]
     window = gui.Window('Bingo', layout, finalize=True)
-    window.Maximize()
     graph = window['graph']
 
     previous_numbers = []
@@ -78,6 +79,7 @@ while not close_program:
     if event == 'Afsluiten':  # if user closes window or clicks cancel
         confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
         if confirm == 'OK':
+            print('Program ended!')
             close_program = True
             window.close()
 
@@ -89,37 +91,39 @@ while not close_program:
         print(f'Current number is {nr}')
 
         # Draw current number in large circle
-        circle = graph.draw_circle((500, 220), 200, fill_color='red', line_color='black', line_width=5)
-        number = graph.DrawText(nr, (500, 220), font=("Helvetica", 200), color='white', text_location='center')
+        circle = graph.draw_circle((WIDTH/2, 210), 190, fill_color='red', line_color='black', line_width=5)
+        number = graph.DrawText(nr, (WIDTH/2, 210), font=("Helvetica", 190), color='white', text_location='center')
 
         # Draw previous numbers in small circles
-        x, y = 45, 750
+        x, y = 45, HEIGHT-50
         n_prev_nrs = 0
         for prev_nr in previous_numbers:
             n_prev_nrs += 1
             circle = graph.draw_circle((x, y), 28, fill_color='red', line_color='black', line_width=3)
             number = graph.DrawText(prev_nr, (x, y), font=('Helvetica', 30), color='white', text_location='center')
-            x += 65
-            if n_prev_nrs % 15 == 0:
+            x += 63
+            if n_prev_nrs % 20 == 0:
                 x = 45
-                y -= 70
+                y -= 66
+            if n_prev_nrs == 67:
+                x += 378
         previous_numbers.append(nr)
         window.refresh()
 
-        # Speak the current number
-        try:
-            if offline_voice:
-                # Play offline sound file (in Dutch)
-                playsound(f'records/Record-{nr:03}.mp3')
-
-            else:
-                # Play number using Google Text To Speech in language of choice
-                tts = gTTS(text=str(nr), lang='nl', slow=False)
-                tts.save("nr.mp3")
-                playsound('nr.mp3')
-
-        except Exception as e:
-            print(e)
+        # # Speak the current number
+        # try:
+        #     if offline_voice:
+        #         # Play offline sound file (in Dutch)
+        #         playsound(f'records/Record-{nr:03}.mp3')
+        #
+        #     else:
+        #         # Play number using Google Text To Speech in language of choice
+        #         tts = gTTS(text=str(nr), lang='nl', slow=False)
+        #         tts.save("nr.mp3")
+        #         playsound('nr.mp3')
+        #
+        # except Exception as e:
+        #     print(e)
 
     if not close_program and len(previous_numbers) == max_numbers:
         # gui.Popup('Het programma is afgelopen!', title='Einde', font=font)
