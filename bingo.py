@@ -37,24 +37,15 @@ while begin_screen:
         begin_screen = False
         close_program = True
     if event == 'Afsluiten':  # if user closes window or clicks cancel
-        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
+        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font, keep_on_top=True)
         if confirm == 'OK':
             print('Program ended!')
             begin_screen = False
             close_program = True
     if event == 'Start':
         begin, end, max_numbers = 1, 75, 75
-        try:
-            begin = int(begin)
-            end = int(end)
-            max_numbers = int(max_numbers)
-        except:
-            gui.Popup('Gelieve enkel getallen op te geven!', font=font)
-        if begin >= end:
-            gui.Popup('Gelieve een geldig begin en eind nummer in te geven!', font=font)
-        else:
-            print(f'Picking {max_numbers} random numbers between {begin} and {end}.')
-            begin_screen = False
+        print(f'Picking {max_numbers} random numbers between {begin} and {end}.')
+        begin_screen = False
 window.close()
 
 # Game screen to play the lottery (set fixed window size)
@@ -77,7 +68,7 @@ while not close_program:
         begin_screen = False
         close_program = True
     if event == 'Afsluiten':  # if user closes window or clicks cancel
-        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
+        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font, keep_on_top=True)
         if confirm == 'OK':
             print('Program ended!')
             close_program = True
