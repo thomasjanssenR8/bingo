@@ -3,6 +3,8 @@ Play a Bingo game using the PySimpleGUI framework.
 
 The program generates random numbers between 1 and 75 (without replacement) and displays them on a canvas.
 Previously taken numbers are shown in small circles on the canvas.
+Also, the current number is spoken out loud, either by a Google Translate Voice in a language of your choice,
+either by a Dutch voice which you can use offline (set the 'offline_voice' parameter to True or False).
 
 Written by Thomas Janssen, December 2019.
 """
@@ -13,7 +15,12 @@ import random
 from gtts import gTTS
 from playsound import playsound
 
+
+# Choose a theme
 gui.theme('Lightgreen')
+
+# Set this parameter to True for offline voice in Dutch, or to False for a Google Translate voice in any language.
+offline_voice = True
 
 # Begin screen to enter begin number, end number and amount of numbers in the lottery.
 font = ('Helvetica', 20)
@@ -26,9 +33,14 @@ close_program = False
 global begin, end, max_numbers, graph
 while begin_screen:
     event, values = window.read()
-    if event in (None, 'Afsluiten'):  # if user closes window or clicks cancel
+    if event is None:
         begin_screen = False
         close_program = True
+    if event == 'Afsluiten':  # if user closes window or clicks cancel
+        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
+        if confirm == 'OK':
+            begin_screen = False
+            close_program = True
     if event == 'Start':
         begin, end, max_numbers = 1, 75, 75
         try:
@@ -59,9 +71,15 @@ if not close_program:
 
 while not close_program:
     event, values = window.read()
-    if event in (None, 'Afsluiten'):
+
+    if event is None:
+        begin_screen = False
         close_program = True
-        window.close()
+    if event == 'Afsluiten':  # if user closes window or clicks cancel
+        confirm = gui.PopupOKCancel('Weet u zeker dat u wilt afsluiten?', title='Bevestigen', font=font)
+        if confirm == 'OK':
+            close_program = True
+            window.close()
 
     # Get unique random numbers
     if event == 'Volgend nummer trekken':
@@ -88,11 +106,18 @@ while not close_program:
         previous_numbers.append(nr)
         window.refresh()
 
-        # Play number using Google TSS
+        # Speak the current number
         try:
-            tts = gTTS(text=str(nr), lang='nl', slow=False)
-            tts.save("nr.mp3")
-            playsound('nr.mp3')
+            if offline_voice:
+                # Play offline sound file (in Dutch)
+                playsound(f'records/Record-{nr:03}.aac')
+
+            else:
+                # Play number using Google Text To Speech in language of choice
+                tts = gTTS(text=str(nr), lang='nl', slow=False)
+                tts.save("nr.mp3")
+                playsound('nr.mp3')
+
         except Exception as e:
             print(e)
 

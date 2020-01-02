@@ -6,6 +6,9 @@ Play a Bingo game using the PySimpleGUI framework.
 The program generates random numbers between 1 and 75 (without replacement) and displays them on a canvas.
 Previously taken numbers are shown in small circles on the canvas.
 
+Also, the current number is spoken out loud, either by a Google Translate Voice in a language of your choice,
+either by a Dutch voice which you can use offline (set the 'offline_voice' parameter to True or False in [bingo.py](bingo.py)).
+
 Written by Thomas Janssen, December 2019.
 
 ## Installation
@@ -18,9 +21,9 @@ First clone this repository. Next, just install the requirements and run the fil
 `python3 bingo.py`
 
 
-
 ### Windows
-If you want to try out this game on Windows, follow the easy instructions at [this link](https://datatofish.com/executable-pyinstaller/) to create an executable program, or install Python 3.6 on your desktop. 
+If you want to try out this game on Windows, follow the easy instructions at 
+[this link](https://datatofish.com/executable-pyinstaller/) to create an executable program, or install Python 3.6 on your desktop. 
 Next, install the requirements and run the file [bingo.py](bingo.py):
 
 `pip3 install -r requirements.txt`
