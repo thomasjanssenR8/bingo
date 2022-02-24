@@ -12,6 +12,7 @@ Written by Thomas Janssen, December 2019.
 import PySimpleGUI as gui
 from datetime import date
 import random
+import os
 from gtts import gTTS
 from playsound import playsound
 
@@ -104,8 +105,8 @@ while not close_program:
         # Speak the current number
         try:
             if offline_voice:
-                # Play offline sound file (in Dutch)
-                playsound(f'records/Record-{nr:03}.mp3')
+                # Play offline sound file (in Dutch) (independent of OS used)
+                playsound(os.path.join('records', f'Record-{nr:03}.mp3'))
 
             else:
                 # Play number using Google Text To Speech in language of choice
